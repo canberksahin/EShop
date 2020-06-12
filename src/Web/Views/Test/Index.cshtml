@@ -1,0 +1,17 @@
+﻿@using ApplicationCore.Entities
+@model List<Category>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Kategoriler</h1>
+
+<ol>
+    @foreach (var item in Model)
+    {
+        <li>
+            @item.CategoryName
+        </li>
+    }
+</ol>
+
