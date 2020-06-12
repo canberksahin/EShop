@@ -1,4 +1,5 @@
 ﻿using ApplicationCore.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace Infrastructure.Data.Config
 {
-    class BrandConfiguration
+    public class BrandConfiguration : IEntityTypeConfiguration<Brand>
     {
         public void Configure(EntityTypeBuilder<Brand> builder)
         {
