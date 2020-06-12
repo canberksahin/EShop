@@ -1,0 +1,24 @@
+﻿using ApplicationCore.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Infrastructure.Data.Config
+{
+    class BrandConfiguration
+    {
+        public void Configure(EntityTypeBuilder<Brand> builder)
+        {
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Id)
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            builder.Property(x => x.BrandName)
+                .HasMaxLength(100)
+                .IsRequired();
+        }
+    }
+}
