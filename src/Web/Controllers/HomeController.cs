@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationCore.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Web.Interfaces;
 using Web.Models;
 
 namespace Web.Controllers
@@ -12,15 +14,17 @@ namespace Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IHomeIndexViewModelService _homeIndexViewModelService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IHomeIndexViewModelService homeIndexViewModelService)
         {
             _logger = logger;
+            _homeIndexViewModelService = homeIndexViewModelService;
         }
 
-        public IActionResult Index()
+        public async  Task<IActionResult> Index(int? categoryId, int? brandId)
         {
-            return View();
+            return View( await _homeIndexViewModelService.GetHomeIndexViewModel(categoryId,brandId));
         }
 
         public IActionResult Privacy()
