@@ -1,7 +1,9 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
-using ApplicationCore.Specification;
+using ApplicationCore.Specifications;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,22 +53,40 @@ namespace Web.Services
             return items;
         }
 
-        public async Task<HomeIndexViewModel> GetHomeIndexViewModel(int? categoryId, int? brandId)
+        public async Task<HomeIndexViewModel> GetHomeIndexViewModel(int pageIndex, int itemsPerPage,int? categoryId, int? brandId)
         {
+            int totalItems = await _productRepository.CountAsync(new ProductsFilterSpecification(categoryId, brandId));
+            var products = await _productRepository.ListAsync(
+                new ProductsFilterPaginatedSpecification(
+                    (pageIndex - 1) * itemsPerPage,
+                    itemsPerPage,
+                    categoryId,
+                    brandId)
+                );
+
+
             var vm = new HomeIndexViewModel
             {
                 Categories = await GetCategories(),
                 Brands = await GetBrands(),
-                Products = (await _productRepository.ListAsync(new ProductsFilterSpecification(categoryId, brandId))).Select(x => new ProductViewModel
-                {
-                    Id = x.Id,
-                    ProductName = x.ProductName,
-                    Description = x.Description,
-                    UnitPrice = x.UnitPrice,
-                    Photo = string.IsNullOrEmpty(x.Photo) ? "no-product-image.png" : x.Photo
-                }).ToList(),
+                Products = products
+                    .Select(x => new ProductViewModel()
+                    {
+                        Id = x.Id,
+                        ProductName = x.ProductName,
+                        Description = x.Description,
+                        UnitPrice = x.UnitPrice,
+                        Photo = string.IsNullOrEmpty(x.Photo) ? "no-product-image.png" : x.Photo
+                    }).ToList(),
                 CategoryId = categoryId,
-                BrandId = brandId
+                BrandId = brandId,
+                PaginationInfo = new PaginationInfoViewModel
+                {
+                    TotalItems = totalItems,
+                    TotalPages = (int)Math.Ceiling((decimal)totalItems/itemsPerPage),
+                    CurrentPage = pageIndex,
+                    ItemsOnPage = products.Count
+                }
             };
 
             return vm;

@@ -6,12 +6,13 @@ using System.Text;
 
 namespace ApplicationCore.Specifications
 {
-    public class ProductsFilterSpecification  :BaseSpecification<Product>
+    public class ProductsFilterPaginatedSpecification  :BaseSpecification<Product>
     {
-        public ProductsFilterSpecification(int? categoryId, int? brandId)
+        public ProductsFilterPaginatedSpecification(int skip, int take,int? categoryId, int? brandId)
         {
             AddCriteria(x => (!categoryId.HasValue || x.CategoryId == categoryId) 
             && (!brandId.HasValue ||x.BrandId == brandId));
+            ApplyPaging(skip, take);
         }
     }
 }

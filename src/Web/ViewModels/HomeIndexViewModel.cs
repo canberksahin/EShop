@@ -19,5 +19,7 @@ namespace Web.ViewModels
 
         public int? BrandId { get; set; }
 
+        public PaginationInfoViewModel PaginationInfo { get; set; }
+
     }
 }

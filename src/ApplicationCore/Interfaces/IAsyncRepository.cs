@@ -13,6 +13,7 @@ namespace ApplicationCore.Interfaces
 
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> specification);
 
-        //Task<IReadOnlyList<T>> 
+        Task<int> CountAsync(ISpecification<T> specification);
+
     }
 }
