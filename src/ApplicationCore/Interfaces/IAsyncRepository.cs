@@ -12,5 +12,7 @@ namespace ApplicationCore.Interfaces
         Task<IReadOnlyList<T>> ListAllAsync();
 
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> specification);
+
+        //Task<IReadOnlyList<T>> 
     }
 }

@@ -28,11 +28,11 @@ namespace Web.Services
             var brands = await _brandRepository.ListAllAsync();
 
             var items = brands.Select(x => new SelectListItem() { Text = x.BrandName, Value = x.Id.ToString() })
-                .OrderBy(x=>x.Text)
+                .OrderBy(x => x.Text)
                 .ToList();
 
             var allItem = new SelectListItem() { Value = null, Text = "All", Selected = true };
-            items.Insert(0,allItem);
+            items.Insert(0, allItem);
 
             return items;
         }
@@ -45,8 +45,8 @@ namespace Web.Services
                 .OrderBy(x => x.Text)
                 .ToList();
 
-            var allItem = new SelectListItem() { Value = null, Text = "All" ,Selected=true};
-            items.Insert(0,allItem);
+            var allItem = new SelectListItem() { Value = null, Text = "All", Selected = true };
+            items.Insert(0, allItem);
 
             return items;
         }
@@ -57,7 +57,14 @@ namespace Web.Services
             {
                 Categories = await GetCategories(),
                 Brands = await GetBrands(),
-                Products = await _productRepository.ListAsync(new ProductsFilterSpecification(categoryId,brandId)),
+                Products = (await _productRepository.ListAsync(new ProductsFilterSpecification(categoryId, brandId))).Select(x => new ProductViewModel
+                {
+                    Id = x.Id,
+                    ProductName = x.ProductName,
+                    Description = x.Description,
+                    UnitPrice = x.UnitPrice,
+                    Photo = string.IsNullOrEmpty(x.Photo) ? "no-product-image.png" : x.Photo
+                }).ToList(),
                 CategoryId = categoryId,
                 BrandId = brandId
             };
