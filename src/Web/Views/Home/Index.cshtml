@@ -3,7 +3,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-<form>
+<form method="get">
     <div class="row">
         <div class="col">
             <div class="form-group">
@@ -22,19 +22,25 @@
     </div>
 </form>
 
-@*https://startbootstrap.com/templates/shop-homepage/*@
-<div class="row">
+@if (Model.Products.Count > 0)
+{
+    @*https://startbootstrap.com/templates/shop-homepage/*@
+    <div class="row">
 
-    @foreach (var product in Model.Products)
-    {
-        <partial name="_ProductPartial" model="product"/>
-    }
+        @foreach (var product in Model.Products)
+        {
+            <partial name="_ProductPartial" model="product" />
+        }
 
-</div>
+    </div>
 
-<div>
-    Toplam Sayfa Adedi: @Model.PaginationInfo.TotalPages <br />
-    Şu anki Sayfa:@Model.PaginationInfo.CurrentPage  <br />
-    Toplam Öğe Adedi: @Model.PaginationInfo.TotalItems <br />
-    Bu Sayfadaki Öge Adedi: @Model.PaginationInfo.ItemsOnPage <br />
-</div>
+    <partial name="_PaginationPartial" model="Model.PaginationInfo" />
+}
+else
+{
+    <div class="text-center p-5">
+        No Products were found matching your selection.
+    </div>
+}
+
+
