@@ -20,9 +20,37 @@ namespace Infrastructure.Data
             _dbcontext = context;
         }
 
+        public async Task<T> AddAsync(T entity)
+        {
+            _dbcontext.Set<T>().Add(entity);
+            await _dbcontext.SaveChangesAsync();
+            return entity;
+        }
+
         public async Task<int> CountAsync(ISpecification<T> specification)
         {
-            return await(await ApplySpecification(specification)).CountAsync();
+            return await (await ApplySpecification(specification)).CountAsync();
+        }
+
+        public async Task DeleteAsync(T entity)
+        {
+            _dbcontext.Remove(entity);
+            await _dbcontext.SaveChangesAsync();
+        }
+
+        public async Task<T> FirstAsync(ISpecification<T> specification)
+        {
+            return await (await ApplySpecification(specification)).FirstAsync();
+        }
+
+        public async Task<T> FirstOrDefaultAsync(ISpecification<T> specification)
+        {
+            return await (await ApplySpecification(specification)).FirstOrDefaultAsync();
+        }
+
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await _dbcontext.FindAsync<T>(id);
         }
 
         public async Task<IReadOnlyList<T>> ListAllAsync()
@@ -32,7 +60,13 @@ namespace Infrastructure.Data
 
         public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> specification)
         {
-            return await(await ApplySpecification(specification)).ToListAsync();
+            return await (await ApplySpecification(specification)).ToListAsync();
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            _dbcontext.Update(entity);
+            await _dbcontext.SaveChangesAsync();
         }
 
         private async Task<IQueryable<T>> ApplySpecification(ISpecification<T> specification)
