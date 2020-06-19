@@ -9,6 +9,13 @@
             </h4>
             <h5>₺@Model.UnitPrice.ToString("N2")</h5>
             <p class="card-text">@Model.Description</p>
+            <form asp-controller="Basket" asp-action="Index">
+                <input type="hidden" asp-for="Id" />
+                <button class="btn btn-success btn-block">
+                    <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                    Add To Basket
+                </button>
+            </form>
         </div>
     </div>
 </div>
